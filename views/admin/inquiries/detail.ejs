@@ -1,0 +1,50 @@
+<%- include('../partials/start') %>
+<div class="page-header mb-3">
+  <h2 class="page-title"><%= inquiry.customerName %></h2>
+</div>
+<div class="row row-cards">
+  <div class="col-lg-8">
+    <div class="card">
+      <div class="card-body">
+        <dl class="row">
+          <dt class="col-sm-3">E-posta</dt>
+          <dd class="col-sm-9"><%= inquiry.email %></dd>
+          <dt class="col-sm-3">Telefon</dt>
+          <dd class="col-sm-9"><%= inquiry.phone || '—' %></dd>
+          <dt class="col-sm-3">Ürün</dt>
+          <dd class="col-sm-9">
+            <% if (inquiry.product) { %>
+              <a href="/products/<%= inquiry.product.slug %>"><%= inquiry.product.name %></a>
+            <% } else { %>
+              Ürün seçilmedi
+            <% } %>
+          </dd>
+          <dt class="col-sm-3">Tarih</dt>
+          <dd class="col-sm-9"><%= formatDate(inquiry.createdAt) %></dd>
+          <dt class="col-sm-3">Durum</dt>
+          <dd class="col-sm-9"><%= statusLabel(inquiry.status) %></dd>
+        </dl>
+        <h3 class="h4">Mesaj</h3>
+        <p class="inquiry-message"><%= inquiry.message %></p>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-4">
+    <form class="card" method="post" action="/admin/inquiries/<%= inquiry.id %>/status">
+      <div class="card-body">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <label class="form-label" for="status">Durumu güncelle</label>
+        <select class="form-select" id="status" name="status">
+          <% statuses.forEach(function (status) { %>
+            <option value="<%= status %>" <%= inquiry.status === status ? 'selected' : '' %>><%= statusLabel(status) %></option>
+          <% }) %>
+        </select>
+        <% if (errors.status) { %><div class="text-danger small mt-1"><%= errors.status %></div><% } %>
+      </div>
+      <div class="card-footer">
+        <button class="btn btn-primary" type="submit">Durumu kaydet</button>
+      </div>
+    </form>
+  </div>
+</div>
+<%- include('../partials/end') %>

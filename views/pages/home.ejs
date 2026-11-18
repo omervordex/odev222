@@ -1,0 +1,132 @@
+<%- include('../partials/head') %>
+<%- include('../partials/header') %>
+
+<main id="content">
+  <section class="hero">
+    <div class="hero-copy">
+      <p class="eyebrow">Başakşehir · İstanbul</p>
+      <hr class="gold-rule">
+      <h1>Görüşünüze tarz katın.</h1>
+      <p class="lede">Tarzınızı yansıtan gözlük modellerini keşfedin.</p>
+      <div class="hero-actions">
+        <a class="btn-solid" href="/products">Koleksiyonu Keşfet</a>
+        <a class="btn-line" href="/contact">Bize Ulaşın</a>
+      </div>
+    </div>
+    <figure class="hero-media">
+      <img src="/images/hero-editorial.jpg" alt="Yuvarlak metal gözlüğü iki eliyle tutan bir kişinin siyah beyaz yakın çekimi.">
+    </figure>
+  </section>
+
+  <section class="section" aria-labelledby="featured-heading">
+    <div class="shell">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Seçilenler</p>
+          <h2 id="featured-heading">Öne Çıkan Modeller</h2>
+        </div>
+        <a class="section-link" href="/products">Tümünü Gör</a>
+      </div>
+      <% if (featuredProducts.length) { %>
+        <p class="demo-note">Tanıtım kataloğu. Bu örnek çerçeveler sunum içindir ve mağazanın doğrulanmış stoğu değildir.</p>
+        <div class="featured-grid">
+          <% featuredProducts.forEach(function (product) { %>
+            <%- include('../partials/productCard', { product, featured: true }) %>
+          <% }) %>
+        </div>
+      <% } else { %>
+        <%- include('../partials/emptyState', {
+          eyebrow: 'Katalog',
+          heading: 'Henüz öne çıkan model yok',
+          text: 'Bir ürün öne çıkan olarak işaretlendiğinde burada görünür.'
+        }) %>
+      <% } %>
+    </div>
+  </section>
+
+  <section class="band" aria-labelledby="categories-heading">
+    <div class="shell">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Göz at</p>
+          <h2 id="categories-heading">Kategoriler</h2>
+        </div>
+      </div>
+      <p class="demo-note">Tanıtım kategorileri. Bu kartlar doğrulanmış bir stok listesi değildir.</p>
+      <div class="category-row">
+        <a class="category-tile" href="/products?category=optical-frames">
+          <img src="/images/category-optical.jpg" alt="Kaş üstü numaralı gözlük çerçevesi.">
+          <div>
+            <h3>Numaralı Gözlük Çerçeveleri</h3>
+            <p>Sunum için örnek numaralı gözlük çerçeveleri.</p>
+            <span>Modelleri gör</span>
+          </div>
+        </a>
+        <a class="category-tile" href="/products?category=sunglasses">
+          <img src="/images/category-sunglasses.jpg" alt="Mermer üzerinde yuvarlak metal güneş gözlüğü.">
+          <div>
+            <h3>Güneş Gözlükleri</h3>
+            <p>Sunum için örnek güneş gözlükleri.</p>
+            <span>Modelleri gör</span>
+          </div>
+        </a>
+        <a class="category-tile" href="/products?category=contact-lenses">
+          <img src="/images/category-contacts.jpg" alt="Beyaz yüzeyde şeffaf deneme lensleri.">
+          <div>
+            <h3>Kontakt Lensler</h3>
+            <p>Tanıtım kategorisi. Listelenen bir kontakt lens ürünü yok.</p>
+            <span>Kategoriyi gör</span>
+          </div>
+        </a>
+        <a class="category-tile" href="/products?category=kids-eyewear">
+          <img src="/images/category-kids.jpg" alt="Renkli asetat çerçeveler.">
+          <div>
+            <h3>Çocuk Gözlükleri</h3>
+            <p>Tanıtım kategorisi. Listelenen bir çocuk gözlüğü yok.</p>
+            <span>Kategoriyi gör</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="about" aria-labelledby="about-heading">
+    <div class="shell editorial">
+      <figure class="editorial-photo">
+        <img src="/images/editorial-optical.jpg" alt="Numaralı gözlük çerçevesinin yakın çekimi.">
+      </figure>
+      <div>
+        <p class="eyebrow">Mağaza</p>
+        <h2 id="about-heading">Optik Ayşegül Özçelik</h2>
+        <p class="lede">
+          İstanbul Başakşehir’de numaralı gözlük, güneş gözlüğü ve kontakt lens sunan bir optik mağazası.
+        </p>
+        <ul class="service-list">
+          <% store.services.forEach(function (service) { %>
+            <li><%= service %></li>
+          <% }) %>
+        </ul>
+        <div class="inline-actions stack-gap">
+          <a class="btn-dark" href="/about">Mağaza hakkında</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-follow" aria-labelledby="visit-heading">
+    <div class="shell">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Ziyaret</p>
+          <h2 id="visit-heading">Başakşehir</h2>
+        </div>
+      </div>
+      <div class="location-panel">
+        <%- include('../partials/storeFacts') %>
+        <%- include('../partials/mapEmbed') %>
+      </div>
+    </div>
+  </section>
+</main>
+
+<%- include('../partials/footer') %>

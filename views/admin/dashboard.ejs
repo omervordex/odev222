@@ -1,0 +1,55 @@
+<%- include('partials/start') %>
+<div class="page-header mb-3">
+  <h2 class="page-title">Panel</h2>
+</div>
+<div class="row row-cards mb-3">
+  <div class="col-sm-6 col-lg-3">
+    <div class="card stat-card"><div class="card-body"><div class="subheader">Ürünler</div><div class="stat-value mb-0"><%= stats.products %></div></div></div>
+  </div>
+  <div class="col-sm-6 col-lg-3">
+    <div class="card stat-card"><div class="card-body"><div class="subheader">Kategoriler</div><div class="stat-value mb-0"><%= stats.categories %></div></div></div>
+  </div>
+  <div class="col-sm-6 col-lg-3">
+    <div class="card stat-card"><div class="card-body"><div class="subheader">Mesajlar</div><div class="stat-value mb-0"><%= stats.inquiries %></div></div></div>
+  </div>
+  <div class="col-sm-6 col-lg-3">
+    <div class="card stat-card"><div class="card-body"><div class="subheader">Yeni mesajlar</div><div class="stat-value mb-0"><%= stats.newInquiries %></div></div></div>
+  </div>
+</div>
+<div class="row row-cards">
+  <div class="col-lg-8">
+    <div class="card">
+      <div class="card-header"><h3 class="card-title">Son mesajlar</h3></div>
+      <div class="table-responsive">
+        <table class="table table-vcenter card-table">
+          <thead>
+            <tr><th>Ad</th><th>Durum</th><th>Tarih</th></tr>
+          </thead>
+          <tbody>
+            <% if (!recentInquiries.length) { %>
+              <tr><td colspan="3">Henüz mesaj yok.</td></tr>
+            <% } %>
+            <% recentInquiries.forEach(function (inquiry) { %>
+              <tr>
+                <td><a href="/admin/inquiries/<%= inquiry.id %>"><%= inquiry.customerName %></a></td>
+                <td><span class="badge status-badge status-<%= inquiry.status %>"><%= statusLabel(inquiry.status) %></span></td>
+                <td><%= formatDate(inquiry.createdAt) %></td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-4">
+    <div class="card">
+      <div class="card-header"><h3 class="card-title">Hızlı işlemler</h3></div>
+      <div class="card-body d-grid gap-2">
+        <a class="btn btn-primary" href="/admin/products/new">Ürün ekle</a>
+        <a class="btn" href="/admin/categories/new">Kategori ekle</a>
+        <a class="btn" href="/admin/inquiries">Mesajları aç</a>
+      </div>
+    </div>
+  </div>
+</div>
+<%- include('partials/end') %>

@@ -1,0 +1,34 @@
+<%- include('../partials/start') %>
+<div class="page-header d-flex flex-wrap gap-2 align-items-center mb-3">
+  <h2 class="page-title mb-0">Ürünler</h2>
+  <div class="ms-auto">
+    <a class="btn btn-primary" href="/admin/products/new">Ürün ekle</a>
+  </div>
+</div>
+<div class="card">
+  <div class="table-responsive">
+    <table class="table table-vcenter card-table">
+      <thead>
+        <tr><th>Ad</th><th>Marka</th><th>Kategori</th><th>Fiyat</th><th>Öne çıkan</th><th></th></tr>
+      </thead>
+      <tbody>
+        <% if (!products.length) { %>
+          <tr><td colspan="6">Henüz ürün yok.</td></tr>
+        <% } %>
+        <% products.forEach(function (product) { %>
+          <tr>
+            <td><%= product.name %></td>
+            <td><%= product.brand || '—' %></td>
+            <td><%= product.category ? product.category.name : '—' %></td>
+            <td><%= product.price === null ? '—' : formatPrice(product.price) %></td>
+            <td><%= product.isFeatured ? 'Evet' : 'Hayır' %></td>
+            <td class="text-end">
+              <a class="btn btn-sm" href="/admin/products/<%= product.id %>/edit">Düzenle</a>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</div>
+<%- include('../partials/end') %>

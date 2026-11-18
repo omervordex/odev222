@@ -1,0 +1,36 @@
+<%- include('../partials/start') %>
+<div class="page-header d-flex flex-wrap gap-2 align-items-center mb-3">
+  <h2 class="page-title mb-0">Kategoriler</h2>
+  <div class="ms-auto">
+    <a class="btn btn-primary" href="/admin/categories/new">Kategori ekle</a>
+  </div>
+</div>
+<div class="card">
+  <div class="table-responsive">
+    <table class="table table-vcenter card-table">
+      <thead>
+        <tr><th>Ad</th><th>Kısa adres</th><th>Ürün</th><th></th></tr>
+      </thead>
+      <tbody>
+        <% if (!categories.length) { %>
+          <tr><td colspan="4">Henüz kategori yok.</td></tr>
+        <% } %>
+        <% categories.forEach(function (category) { %>
+          <tr>
+            <td><%= category.name %></td>
+            <td><%= category.slug %></td>
+            <td><%= category.productCount %></td>
+            <td class="text-end">
+              <a class="btn btn-sm" href="/admin/categories/<%= category.id %>/edit">Düzenle</a>
+              <form class="d-inline" method="post" action="/admin/categories/<%= category.id %>/delete" data-confirm="Bu kategori silinsin mi?">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                <button class="btn btn-sm btn-outline-danger" type="submit">Sil</button>
+              </form>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</div>
+<%- include('../partials/end') %>

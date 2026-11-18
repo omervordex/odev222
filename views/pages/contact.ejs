@@ -1,0 +1,72 @@
+<%- include('../partials/head') %>
+<%- include('../partials/header') %>
+
+<main id="content" class="section">
+  <div class="shell contact-layout">
+    <div>
+      <p class="eyebrow">İletişim</p>
+      <h1><%= store.name %></h1>
+      <p class="lede"><%= store.location %> mağazası hakkında bir çerçeve veya ziyaret sorunuzu iletin.</p>
+      <%- include('../partials/storeFacts') %>
+      <%- include('../partials/mapEmbed', { compact: true }) %>
+    </div>
+    <div>
+      <form class="inquiry-form" method="post" action="/contact" data-inquiry-form novalidate>
+        <% if (formError) { %>
+          <p class="form-error" role="alert"><%= formError %></p>
+        <% } %>
+        <% if (unknownProduct) { %>
+          <p class="form-error" role="status">Bu çerçeve katalogda yok. Yine de genel bir soru gönderebilirsiniz.</p>
+        <% } else if (selected) { %>
+          <p class="selected-frame"><strong><%= selected.name %></strong><% if (selected.brand) { %>, <%= selected.brand %><% } %> hakkında soruyorsunuz.</p>
+        <% } %>
+
+        <label>
+          <span>Ad soyad</span>
+          <input type="text" name="customer_name" value="<%= values.customerName %>" maxlength="80" autocomplete="name" required aria-invalid="<%= errors.customer_name ? 'true' : 'false' %>">
+          <% if (errors.customer_name) { %><small class="field-error"><%= errors.customer_name %></small><% } %>
+        </label>
+
+        <label>
+          <span>E-posta</span>
+          <input type="email" name="email" value="<%= values.email %>" maxlength="254" autocomplete="email" required aria-invalid="<%= errors.email ? 'true' : 'false' %>">
+          <% if (errors.email) { %><small class="field-error"><%= errors.email %></small><% } %>
+        </label>
+
+        <label>
+          <span>Telefon <em>isteğe bağlı</em></span>
+          <input type="tel" name="phone" value="<%= values.phone %>" maxlength="30" autocomplete="tel" aria-invalid="<%= errors.phone ? 'true' : 'false' %>">
+          <% if (errors.phone) { %><small class="field-error"><%= errors.phone %></small><% } %>
+        </label>
+
+        <label>
+          <span>Ürün <em>isteğe bağlı</em></span>
+          <select name="product_slug" aria-invalid="<%= errors.product_slug ? 'true' : 'false' %>">
+            <option value="">Belirli bir çerçeve yok</option>
+            <% products.forEach(function (product) { %>
+              <option value="<%= product.slug %>" <%= values.productSlug === product.slug ? 'selected' : '' %>><%= product.name %></option>
+            <% }) %>
+          </select>
+          <% if (errors.product_slug) { %><small class="field-error"><%= errors.product_slug %></small><% } %>
+        </label>
+
+        <label>
+          <span>Mesaj</span>
+          <textarea name="message" rows="6" maxlength="2000" required aria-invalid="<%= errors.message ? 'true' : 'false' %>"><%= values.message %></textarea>
+          <% if (errors.message) { %><small class="field-error"><%= errors.message %></small><% } %>
+        </label>
+
+        <div class="hp-field" aria-hidden="true">
+          <label>
+            Şirket sitesi
+            <input type="text" name="company_website" tabindex="-1" autocomplete="off" value="">
+          </label>
+        </div>
+
+        <button class="btn-dark" type="submit">Mesaj Gönder</button>
+      </form>
+    </div>
+  </div>
+</main>
+
+<%- include('../partials/footer') %>

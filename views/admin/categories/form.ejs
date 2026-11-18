@@ -1,0 +1,29 @@
+<%- include('../partials/start') %>
+<div class="page-header mb-3">
+  <h2 class="page-title"><%= category.id ? 'Kategoriyi düzenle' : 'Kategori ekle' %></h2>
+</div>
+<form class="card" method="post" action="<%= category.id ? '/admin/categories/' + category.id : '/admin/categories' %>" novalidate>
+  <div class="card-body">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    <div class="mb-3">
+      <label class="form-label" for="name">Ad</label>
+      <input class="form-control" id="name" name="name" value="<%= category.name %>" required>
+      <% if (errors.name) { %><div class="text-danger small mt-1"><%= errors.name %></div><% } %>
+    </div>
+    <div class="mb-3">
+      <label class="form-label" for="slug">Kısa adres</label>
+      <input class="form-control" id="slug" name="slug" value="<%= category.slug %>" placeholder="Boş bırakılırsa addan üretilir">
+      <% if (errors.slug) { %><div class="text-danger small mt-1"><%= errors.slug %></div><% } %>
+    </div>
+    <div class="mb-3">
+      <label class="form-label" for="description">Açıklama</label>
+      <textarea class="form-control" id="description" name="description" rows="4"><%= category.description %></textarea>
+      <% if (errors.description) { %><div class="text-danger small mt-1"><%= errors.description %></div><% } %>
+    </div>
+  </div>
+  <div class="card-footer d-flex gap-2">
+    <button class="btn btn-primary" type="submit">Kategoriyi kaydet</button>
+    <a class="btn" href="/admin/categories">Vazgeç</a>
+  </div>
+</form>
+<%- include('../partials/end') %>

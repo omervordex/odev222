@@ -1,0 +1,24 @@
+<article class="<%= typeof featured !== 'undefined' && featured ? 'featured-card' : 'col-12 col-md-6 col-xl-4' %>">
+  <a class="product-card" href="/products/<%= product.slug %>">
+    <div class="product-media">
+      <% if (product.imageUrl) { %>
+        <img src="<%= product.imageUrl %>" alt="<%= product.name %>">
+      <% } else { %>
+        <div class="product-media-empty">
+          <span>Fotoğraf bekleniyor</span>
+        </div>
+      <% } %>
+    </div>
+    <div class="product-copy">
+      <% if (product.brand) { %>
+        <p class="eyebrow"><%= product.brand %></p>
+      <% } %>
+      <h3><%= product.name %></h3>
+      <div class="card-line"></div>
+      <p class="product-meta"><%= product.category ? product.category.name : 'Kategori belirtilmedi' %></p>
+      <% if (product.price !== null) { %>
+        <p class="product-price">Fiyat <%= formatPrice(product.price) %></p>
+      <% } %>
+    </div>
+  </a>
+</article>

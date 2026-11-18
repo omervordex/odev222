@@ -1,0 +1,50 @@
+<%- include('../partials/head') %>
+<%- include('../partials/header') %>
+
+<main id="content" class="section">
+  <div class="shell quiz-shell">
+    <p class="eyebrow">Stil testi</p>
+    <h1>Gözlük Stilini Keşfet</h1>
+    <p class="lede">Tarzınıza ve tercihlerinize uygun gözlük modellerini keşfetmek için kısa testimizi tamamlayın.</p>
+
+    <section class="quiz" data-quiz aria-live="polite">
+      <div data-quiz-ask>
+        <div class="quiz-stage" data-quiz-stage>
+          <p class="quiz-progress" data-progress>Soru 1 / 6</p>
+          <div class="progress-track" aria-hidden="true"><span data-progress-bar></span></div>
+          <h2 data-question></h2>
+          <div class="quiz-options" data-options></div>
+        </div>
+        <div class="quiz-nav">
+          <button class="btn-line quiz-prev" type="button" data-prev>Önceki</button>
+          <button class="btn-dark" type="button" data-next>Sonraki</button>
+        </div>
+      </div>
+
+      <div class="quiz-result" data-result hidden>
+        <p class="eyebrow">Stil önerisi</p>
+        <div class="quiz-result-layout">
+          <figure class="quiz-result-photo">
+            <img data-result-image alt="">
+          </figure>
+          <div>
+            <h2 data-result-title></h2>
+            <p data-result-copy></p>
+            <div class="quiz-picks" data-result-products></div>
+            <div class="inline-actions">
+              <a class="btn-dark" href="/products">Koleksiyonu Keşfet</a>
+              <a class="btn-dark quiz-contact" href="/contact">Mağazayla İletişime Geç</a>
+              <button class="btn-line quiz-prev" type="button" data-restart>Testi Yeniden Başlat</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <p class="demo-note">Bu test, tercihlerinize dayalı bir stil önerisidir. Profesyonel optik veya tıbbi değerlendirme yerine geçmez.</p>
+  </div>
+</main>
+
+<script type="application/json" id="quiz-catalog"><%- JSON.stringify(quizProducts).replace(/</g, '\\u003c') %></script>
+<script src="/js/quiz.js"></script>
+<%- include('../partials/footer') %>

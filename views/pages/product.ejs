@@ -1,0 +1,59 @@
+<%- include('../partials/head') %>
+<%- include('../partials/header') %>
+
+<main id="content" class="section">
+  <div class="shell">
+    <p class="eyebrow"><a href="/products">Koleksiyon</a></p>
+    <div class="detail-layout">
+      <div class="detail-media">
+        <% if (product.imageUrl) { %>
+          <img src="<%= product.imageUrl %>" alt="<%= product.name %>">
+        <% } else { %>
+          <div class="product-media-empty detail-empty">
+            <span>Fotoğraf bekleniyor</span>
+          </div>
+        <% } %>
+      </div>
+      <div class="detail-copy">
+        <p class="eyebrow"><%= product.brand || 'Marka belirtilmedi' %></p>
+        <h1><%= product.name %></h1>
+        <hr class="gold-rule">
+        <p class="product-meta">
+          <% if (product.category) { %>
+            <a href="/products?category=<%= product.category.slug %>"><%= product.category.name %></a>
+          <% } else { %>
+            Kategori belirtilmedi
+          <% } %>
+        </p>
+        <% if (product.price !== null) { %>
+          <p class="product-price">Fiyat <%= formatPrice(product.price) %></p>
+        <% } %>
+        <% if (product.description) { %>
+          <p><%= product.description %></p>
+        <% } else { %>
+          <p>Bu çerçeve için henüz bir açıklama eklenmedi.</p>
+        <% } %>
+        <p class="demo-note">Tanıtım örneği. Bu çerçeve mağazanın doğrulanmış stoğu değildir.</p>
+        <a class="btn-dark" href="/contact?product=<%= encodeURIComponent(product.slug) %>">Bu model hakkında sorun</a>
+      </div>
+    </div>
+
+    <% if (relatedProducts && relatedProducts.length) { %>
+      <section class="related" aria-labelledby="related-heading">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Aynı kategoride</p>
+            <h2 id="related-heading">Benzer modeller</h2>
+          </div>
+        </div>
+        <div class="row g-4">
+          <% relatedProducts.forEach(function (product) { %>
+            <%- include('../partials/productCard', { product }) %>
+          <% }) %>
+        </div>
+      </section>
+    <% } %>
+  </div>
+</main>
+
+<%- include('../partials/footer') %>

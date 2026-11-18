@@ -1,0 +1,18 @@
+<header class="site-header">
+  <% const pathName = typeof currentPath === 'string' ? currentPath : ''; %>
+  <div class="shell header-bar">
+    <a class="wordmark" href="/">Optik Ayşegül Özçelik</a>
+    <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="site-nav" aria-label="Menü">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <nav id="site-nav" class="site-nav" data-nav>
+      <a class="<%= pathName === '/' ? 'is-active' : '' %>" href="/" <%= pathName === '/' ? 'aria-current="page"' : '' %>>Ana Sayfa</a>
+      <a class="<%= pathName.startsWith('/products') ? 'is-active' : '' %>" href="/products" <%= pathName.startsWith('/products') ? 'aria-current="page"' : '' %>>Koleksiyon</a>
+      <a class="<%= pathName === '/find-your-frame' ? 'is-active' : '' %>" href="/find-your-frame" <%= pathName === '/find-your-frame' ? 'aria-current="page"' : '' %>>Gözlük Stilini Keşfet</a>
+      <a class="<%= pathName === '/about' ? 'is-active' : '' %>" href="/about" <%= pathName === '/about' ? 'aria-current="page"' : '' %>>Hakkımızda</a>
+      <a class="<%= pathName === '/contact' || pathName.startsWith('/contact/') ? 'is-active' : '' %>" href="/contact" <%= pathName === '/contact' || pathName.startsWith('/contact/') ? 'aria-current="page"' : '' %>>İletişim</a>
+    </nav>
+  </div>
+</header>

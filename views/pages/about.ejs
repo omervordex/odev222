@@ -1,0 +1,35 @@
+<%- include('../partials/head') %>
+<%- include('../partials/header') %>
+
+<main id="content" class="section">
+  <div class="shell editorial">
+    <figure class="editorial-photo">
+      <img src="/images/editorial-sunglasses.jpg" alt="Açık taş yüzeyde yuvarlak metal güneş gözlüğü.">
+    </figure>
+    <div>
+      <p class="eyebrow">Hakkımızda</p>
+      <h1>Optik Ayşegül Özçelik</h1>
+      <p class="lede">
+        Optik Ayşegül Özçelik, İstanbul Başakşehir’de bir optik mağazasıdır. Mağazada numaralı gözlük, güneş gözlüğü ve kontakt lens sunulur.
+      </p>
+      <ul class="service-list">
+        <% store.services.forEach(function (service) { %>
+          <li><%= service %></li>
+        <% }) %>
+      </ul>
+    </div>
+  </div>
+  <div class="shell block-gap">
+    <div class="location-panel">
+      <%- include('../partials/storeFacts') %>
+      <div>
+        <%- include('../partials/mapEmbed') %>
+        <div class="inline-actions stack-gap">
+          <a class="btn-dark" href="/contact">Bize Ulaşın</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<%- include('../partials/footer') %>

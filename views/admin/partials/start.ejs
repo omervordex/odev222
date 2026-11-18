@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="csrf-token" content="<%= csrfToken %>">
+  <title><%= title %> · Yönetim</title>
+  <link rel="stylesheet" href="/vendor/tabler/css/tabler.min.css">
+  <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body>
+  <div class="page">
+    <aside class="navbar navbar-vertical navbar-expand-lg" data-bs-theme="light">
+      <div class="container-fluid">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#admin-menu" aria-controls="admin-menu" aria-expanded="false" aria-label="Menüyü aç">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <h1 class="navbar-brand">
+          <a class="admin-wordmark" href="/admin"><%= storeName %></a>
+          <span class="admin-kicker">Yönetim</span>
+        </h1>
+        <div class="collapse navbar-collapse" id="admin-menu">
+          <ul class="navbar-nav pt-lg-3">
+            <li class="nav-item">
+              <a class="nav-link <%= currentPath === '/admin' ? 'active' : '' %>" href="/admin">
+                <span class="nav-link-title">Panel</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link <%= currentPath.startsWith('/admin/products') ? 'active' : '' %>" href="/admin/products">
+                <span class="nav-link-title">Ürünler</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link <%= currentPath.startsWith('/admin/categories') ? 'active' : '' %>" href="/admin/categories">
+                <span class="nav-link-title">Kategoriler</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link <%= currentPath.startsWith('/admin/inquiries') ? 'active' : '' %>" href="/admin/inquiries">
+                <span class="nav-link-title">Mesajlar</span>
+              </a>
+            </li>
+          </ul>
+          <div class="mt-auto d-grid gap-2">
+            <a class="btn" href="/">Mağazayı gör</a>
+            <form method="post" action="/admin/logout">
+              <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+              <button class="btn btn-outline-secondary w-100" type="submit">Çıkış yap</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </aside>
+    <div class="page-wrapper">
+      <header class="navbar navbar-expand-md d-none d-lg-flex">
+        <div class="container-xl">
+          <div class="navbar-nav flex-row ms-auto">
+            <span class="nav-link"><%= admin.email %></span>
+          </div>
+        </div>
+      </header>
+      <div class="page-body">
+        <div class="container-xl">
+          <%- include('alerts') %>

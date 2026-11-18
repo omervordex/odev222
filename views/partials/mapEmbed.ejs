@@ -1,0 +1,10 @@
+<div class="map-panel<%= typeof compact !== 'undefined' && compact ? ' is-compact' : '' %>">
+  <iframe
+    title="<%= store.name %> — Başakşehir haritası"
+    src="<%= store.mapsEmbed %>"
+    loading="lazy"
+    referrerpolicy="no-referrer-when-downgrade"
+    allowfullscreen></iframe>
+  <p>Mağaza <%= store.landmark %> yakınındadır.</p>
+  <a class="btn-dark" href="<%= store.mapsUrl %>" rel="noopener noreferrer">Yol Tarifi</a>
+</div>

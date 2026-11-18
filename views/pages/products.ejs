@@ -1,0 +1,64 @@
+<%- include('../partials/head') %>
+<%- include('../partials/header') %>
+
+<main id="content" class="section">
+  <div class="shell">
+    <header class="section-heading">
+      <div>
+        <p class="eyebrow">Katalog</p>
+        <h1>Koleksiyon</h1>
+      </div>
+    </header>
+    <p class="lede">İsme veya markaya göre arayın ya da bir kategori seçin. Fiyat yalnızca girilmişse gösterilir.</p>
+    <p class="demo-note">Tanıtım kataloğu. Bu koleksiyondaki çerçeveler sunum için örnek içeriktir ve mağazanın doğrulanmış stoğu değildir.</p>
+
+    <% function catalogHref(slug) {
+      const params = new URLSearchParams();
+      if (search) params.set('q', search);
+      if (slug) params.set('category', slug);
+      const query = params.toString();
+      return query ? '/products?' + query : '/products';
+    } %>
+
+    <div class="catalog-tools">
+      <form class="catalog-filters" method="get" action="/products">
+        <% if (categorySlug) { %>
+          <input type="hidden" name="category" value="<%= categorySlug %>">
+        <% } %>
+        <label>
+          <span>Ara</span>
+          <input type="search" name="q" value="<%= search %>" maxlength="80" placeholder="İsim veya marka">
+        </label>
+        <button class="btn-dark" type="submit">Ara</button>
+      </form>
+      <div class="filter-row" aria-label="Kategoriler">
+        <a class="filter-chip <%= categorySlug ? '' : 'is-active' %>" href="<%= catalogHref('') %>">Tümü</a>
+        <% categories.forEach(function (category) { %>
+          <a class="filter-chip <%= category.slug === categorySlug ? 'is-active' : '' %>" href="<%= catalogHref(category.slug) %>"><%= category.name %></a>
+        <% }) %>
+      </div>
+    </div>
+
+    <% if (notice) { %>
+      <p class="notice" role="status"><%= notice %></p>
+    <% } %>
+
+    <% if (products.length) { %>
+      <div class="row g-4 g-lg-5">
+        <% products.forEach(function (product) { %>
+          <%- include('../partials/productCard', { product }) %>
+        <% }) %>
+      </div>
+    <% } else { %>
+      <%- include('../partials/emptyState', {
+        eyebrow: 'Koleksiyon',
+        heading: (search || categorySlug) ? 'Eşleşen model yok' : 'Koleksiyon boş',
+        text: (search || categorySlug)
+          ? 'Bu filtrelere uyan çerçeve yok. Tüm kataloğu görmek için filtreleri temizleyin.'
+          : 'Yönetim panelinden eklenen ürünler bu alanda görünür. Henüz ürün eklenmedi.'
+      }) %>
+    <% } %>
+  </div>
+</main>
+
+<%- include('../partials/footer') %>

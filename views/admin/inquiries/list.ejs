@@ -1,0 +1,28 @@
+<%- include('../partials/start') %>
+<div class="page-header mb-3">
+  <h2 class="page-title">Mesajlar</h2>
+</div>
+<div class="card">
+  <div class="table-responsive">
+    <table class="table table-vcenter card-table">
+      <thead>
+        <tr><th>Ad</th><th>E-posta</th><th>Ürün</th><th>Durum</th><th>Tarih</th></tr>
+      </thead>
+      <tbody>
+        <% if (!inquiries.length) { %>
+          <tr><td colspan="5">Henüz mesaj yok.</td></tr>
+        <% } %>
+        <% inquiries.forEach(function (inquiry) { %>
+          <tr>
+            <td><a href="/admin/inquiries/<%= inquiry.id %>"><%= inquiry.customerName %></a></td>
+            <td><%= inquiry.email %></td>
+            <td><%= inquiry.product ? inquiry.product.name : '—' %></td>
+            <td><span class="badge status-badge status-<%= inquiry.status %>"><%= statusLabel(inquiry.status) %></span></td>
+            <td><%= formatDate(inquiry.createdAt) %></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</div>
+<%- include('../partials/end') %>

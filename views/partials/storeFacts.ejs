@@ -1,0 +1,28 @@
+<dl class="fact-list">
+  <div>
+    <dt>Adres</dt>
+    <dd><%= store.address %></dd>
+  </div>
+  <div>
+    <dt>Telefon</dt>
+    <dd><a href="tel:<%= store.phoneTel %>"><%= store.phoneDisplay %></a></dd>
+  </div>
+  <div>
+    <dt>Konum</dt>
+    <dd><%= store.location %>. <%= store.landmark %> yakınında.</dd>
+  </div>
+  <div>
+    <dt>Çalışma saatleri</dt>
+    <dd>
+      <%= store.hours %>
+      <p class="hours-note"><%= store.hoursNote %></p>
+    </dd>
+  </div>
+  <div>
+    <dt>Sosyal medya</dt>
+    <dd>
+      <a href="<%= store.instagram %>" rel="noopener noreferrer">Instagram</a><br>
+      <a href="<%= store.facebook %>" rel="noopener noreferrer">Facebook</a>
+    </dd>
+  </div>
+</dl>
