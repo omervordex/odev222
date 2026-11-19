@@ -3,8 +3,11 @@
   publish = "public"
   functions = "netlify/functions"
 
+# Node 22 is the oldest LTS with a native WebSocket. Netlify uses this
+# build version for the Function runtime. Node 20 makes @supabase/realtime-js
+# throw while createClient() looks up that constructor.
 [build.environment]
-  NODE_VERSION = "20"
+  NODE_VERSION = "22"
 
 [functions]
   node_bundler = "esbuild"

@@ -6,6 +6,11 @@
  * models, and other backend code.
  *
  * persistSession is off so a user token can never replace the secret key.
+ *
+ * createClient always constructs a Realtime client, which only checks that a
+ * WebSocket constructor exists. This server never calls channel() or
+ * subscribe(), so no Realtime socket is opened. Database and Storage calls
+ * stay on HTTPS.
  */
 require('dotenv').config({ quiet: true });
 const { createClient } = require('@supabase/supabase-js');

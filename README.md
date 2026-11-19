@@ -6,7 +6,7 @@ The public boutique pages read categories and products from Supabase. Administra
 
 ## How to run
 
-Requirements: Node.js 18 or newer.
+Requirements: Node.js 22 or newer. Node 22 is the first LTS release with the native WebSocket that `@supabase/supabase-js` checks when it creates its client.
 
 ```bash
 npm install
@@ -136,6 +136,8 @@ Do not commit `.env`. In the Netlify UI, set these environment variables for the
 | `UPLOAD_STORAGE` | No | Leave unset or set `auto`. Netlify then uses Supabase Storage |
 | `SUPABASE_STORAGE_BUCKET` | No | Defaults to `product-images` |
 | `NODE_ENV` | No | Netlify sets `production` |
+
+`netlify.toml` sets `NODE_VERSION` to 22. Netlify uses that build version as the Function runtime. Do not pin the function runtime to Node 20 in the Netlify UI.
 
 `ADMIN_EMAIL` and `ADMIN_PASSWORD` are only for `npm run admin:create` on your computer. Run that once against this Supabase project before the demo. The Netlify site then accepts that same administrator. Do not add the password to Netlify.
 
