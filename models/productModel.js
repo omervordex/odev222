@@ -4,7 +4,8 @@ const adminError = require('./adminError');
 
 const PRODUCT_COLUMNS = 'id, name, slug, description, brand, price, image_url, is_featured, categories(id, name, slug)';
 
-const LOCAL_IMAGE = /^\/images\/(?:[a-z0-9][a-z0-9._-]*\/)*[a-z0-9][a-z0-9._-]*\.(?:jpe?g|png|webp)$/i;
+const CATALOG_IMAGE = /^\/images\/[a-z0-9][a-z0-9._-]*\.(?:jpe?g|png|webp)$/i;
+const UPLOAD_IMAGE = /^\/uploads\/products\/[a-f0-9]{32}\.(?:jpe?g|png|webp)$/i;
 
 function safeImageUrl(value) {
   if (!value || typeof value !== 'string') {
@@ -18,7 +19,7 @@ function safeImageUrl(value) {
       return '';
     }
 
-    return LOCAL_IMAGE.test(trimmed) ? trimmed : '';
+    return CATALOG_IMAGE.test(trimmed) || UPLOAD_IMAGE.test(trimmed) ? trimmed : '';
   }
 
   try {
@@ -249,6 +250,23 @@ async function update(id, values) {
     .eq('id', id));
 }
 
+async function imageUsedByOthers(imageUrl) {
+  if (!imageUrl) {
+    return false;
+  }
+
+  const { count, error } = await supabase
+    .from('products')
+    .select('id', { count: 'exact', head: true })
+    .eq('image_url', imageUrl);
+
+  if (error) {
+    throw adminError(error, 'Görsel kullanımı kontrol edilemedi.');
+  }
+
+  return (count || 0) > 0;
+}
+
 async function remove(id) {
   await runQuery(() => supabase.from('products').delete().eq('id', id));
 }
@@ -267,5 +285,6 @@ module.exports = {
   countAll,
   create,
   update,
-  remove
+  remove,
+  imageUsedByOthers
 };

@@ -45,6 +45,13 @@
         <button class="btn btn-primary" type="submit">Durumu kaydet</button>
       </div>
     </form>
+    <form class="card mt-3" method="post" action="/admin/inquiries/<%= inquiry.id %>/delete" data-confirm="Bu mesaj kalıcı olarak silinsin mi?">
+      <div class="card-body">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <p class="text-secondary mb-3">Silinen mesaj gelen kutusundan kaldırılır ve geri alınamaz.</p>
+        <button class="btn btn-outline-danger" type="submit">Mesajı Sil</button>
+      </div>
+    </form>
   </div>
 </div>
 <%- include('../partials/end') %>

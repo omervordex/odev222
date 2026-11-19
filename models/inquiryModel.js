@@ -40,6 +40,7 @@ module.exports = {
   listAll,
   findById,
   updateStatus,
+  remove,
   countAll,
   countByStatus
 };
@@ -105,6 +106,17 @@ async function updateStatus(id, status) {
 
   if (error) {
     throw adminError(error, 'Mesaj durumu güncellenemedi.');
+  }
+}
+
+async function remove(id) {
+  const { error } = await supabase
+    .from('inquiries')
+    .delete()
+    .eq('id', id);
+
+  if (error) {
+    throw adminError(error, 'Mesaj silinemedi. Lütfen yeniden deneyin.');
   }
 }
 

@@ -75,8 +75,38 @@ async function updateStatus(req, res, next) {
   }
 }
 
+async function remove(req, res, next) {
+  try {
+    if (validationResult(req).array().some((item) => item.path === 'id')) {
+      const error = new Error('Bu kayıt bulunamadı.');
+      error.status = 404;
+      throw error;
+    }
+
+    const inquiry = await inquiryModel.findById(req.params.id);
+    if (!inquiry) {
+      setFlash(req, 'Silinecek mesaj bulunamadı.', 'danger');
+      res.redirect(303, '/admin/inquiries');
+      return;
+    }
+
+    await inquiryModel.remove(inquiry.id);
+    setFlash(req, 'Mesaj silindi.');
+    res.redirect(303, '/admin/inquiries');
+  } catch (error) {
+    if (error.status && error.status < 500) {
+      next(error);
+      return;
+    }
+
+    setFlash(req, 'Mesaj silinemedi. Lütfen yeniden deneyin.', 'danger');
+    res.redirect(303, '/admin/inquiries');
+  }
+}
+
 module.exports = {
   list,
   detail,
-  updateStatus
+  updateStatus,
+  remove
 };

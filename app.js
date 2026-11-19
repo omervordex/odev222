@@ -1,9 +1,9 @@
-const path = require('path');
 const express = require('express');
-const session = require('express-session');
 const helmet = require('helmet');
 
 const config = require('./config');
+const { existingDirectory } = require('./config/paths');
+const adminSession = require('./middleware/adminSession');
 require('./config/supabase');
 const pageRoutes = require('./routes/pageRoutes');
 const productRoutes = require('./routes/productRoutes');
@@ -17,6 +17,25 @@ if (!config.sessionSecret) {
 }
 
 const app = express();
+
+if (process.env.AWS_LAMBDA_FUNCTION_NAME || process.env.NETLIFY === 'true') {
+  app.set('trust proxy', 1);
+}
+
+function stripFunctionPrefix(req, res, next) {
+  const prefix = '/.netlify/functions/server';
+  const queryIndex = req.url.indexOf('?');
+  const pathname = queryIndex === -1 ? req.url : req.url.slice(0, queryIndex);
+  const query = queryIndex === -1 ? '' : req.url.slice(queryIndex);
+
+  if (pathname === prefix || pathname.startsWith(`${prefix}/`)) {
+    req.url = `${pathname.slice(prefix.length) || '/'}${query}`;
+  }
+
+  next();
+}
+
+app.use(stripFunctionPrefix);
 
 const storeAddress = 'Başak Mah., Yeşil Vadi Cad., Referans Vadi Sitesi Dükkanları C Blok No: 14, 34480 Başakşehir / Istanbul';
 
@@ -74,37 +93,51 @@ app.locals.formatDate = function formatDate(value) {
   });
 };
 
+const viewsDir = existingDirectory('views');
+
+if (!viewsDir) {
+  throw new Error('EJS views directory was not found.');
+}
+
 app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', viewsDir);
 
 app.use(helmet({
   contentSecurityPolicy: {
     directives: {
       imgSrc: ["'self'", 'data:', 'https:'],
-      frameSrc: ["'self'", 'https://maps.google.com', 'https://www.google.com']
+      scriptSrc: ["'self'", 'https://www.instagram.com'],
+      frameSrc: ["'self'", 'https://maps.google.com', 'https://www.google.com', 'https://www.instagram.com', 'https://instagram.com']
     }
   }
 }));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
-app.use('/vendor/bootstrap', express.static(path.join(__dirname, 'node_modules/bootstrap/dist')));
-app.use('/vendor/tabler', express.static(path.join(__dirname, 'node_modules/@tabler/core/dist')));
-app.use(express.static(path.join(__dirname, 'public')));
-
-// MemoryStore keeps sessions in this process only. That is a deployment blocker
-// for production: use a shared session store before running more than one server.
-app.use(session({
-  name: 'optical.sid',
-  secret: config.sessionSecret,
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-    httpOnly: true,
-    sameSite: 'lax',
-    secure: config.isProduction,
-    maxAge: 1000 * 60 * 60 * 8
+function mountStatic(urlPath, candidates) {
+  const directory = candidates.find((candidate) => candidate);
+  if (directory) {
+    app.use(urlPath, express.static(directory));
   }
-}));
+}
+
+mountStatic('/vendor/bootstrap', [
+  existingDirectory('node_modules', 'bootstrap', 'dist'),
+  existingDirectory('public', 'vendor', 'bootstrap')
+]);
+mountStatic('/vendor/tabler', [
+  existingDirectory('node_modules', '@tabler', 'core', 'dist'),
+  existingDirectory('public', 'vendor', 'tabler')
+]);
+
+const publicDir = existingDirectory('public');
+if (publicDir) {
+  app.use(express.static(publicDir));
+}
+
+// The admin session lives in a signed cookie so it survives separate
+// Netlify function instances. Do not put secrets other than the admin id,
+// CSRF token, and flash message in this cookie.
+app.use(adminSession);
 
 app.use((req, res, next) => {
   res.locals.currentPath = req.path;
@@ -124,6 +157,10 @@ if (!config.isProduction) {
 app.use(notFound);
 app.use(errorHandler);
 
-app.listen(config.port, () => {
-  console.log(`Server running at http://localhost:${config.port} (${config.nodeEnv})`);
-});
+if (require.main === module) {
+  app.listen(config.port, () => {
+    console.log(`Server running at http://localhost:${config.port} (${config.nodeEnv})`);
+  });
+}
+
+module.exports = app;

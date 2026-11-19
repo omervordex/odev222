@@ -1,4 +1,41 @@
+const fs = require('fs');
+const path = require('path');
 const productModel = require('../models/productModel');
+
+const INSTAGRAM_POSTS = [
+  {
+    id: 'DWPH2gHjPL4',
+    kind: 'video',
+    url: 'https://www.instagram.com/optikaysegulozcelik/reel/DWPH2gHjPL4/',
+    alt: 'Mağazada oval Tiffany & Co. güneş gözlüğü takan kişi ve öndeki gözlük standı.'
+  },
+  {
+    id: 'DaFq8mCNWAM',
+    kind: 'video',
+    url: 'https://www.instagram.com/optikaysegulozcelik/reel/DaFq8mCNWAM/',
+    alt: 'Bir elde tutulan çerçevesiz güneş gözlüğünün yakın çekimi.'
+  },
+  {
+    id: 'DdQ5JyHkddN',
+    kind: 'photo',
+    url: 'https://www.instagram.com/optikaysegulozcelik/p/DdQ5JyHkddN/',
+    alt: 'Masada Miu Miu kutusu, kılıfı ve iki güneş gözlüğü.'
+  }
+];
+
+function instagramPosts() {
+  return INSTAGRAM_POSTS.map((post) => {
+    const directory = path.join(__dirname, '../public/images/instagram');
+    const imageFile = path.join(directory, `${post.id}.jpg`);
+    const videoFile = path.join(directory, `${post.id}.mp4`);
+
+    return {
+      ...post,
+      image: fs.existsSync(imageFile) ? `/images/instagram/${post.id}.jpg` : '',
+      video: fs.existsSync(videoFile) ? `/images/instagram/${post.id}.mp4` : ''
+    };
+  });
+}
 
 async function home(req, res, next) {
   try {
@@ -7,7 +44,8 @@ async function home(req, res, next) {
     res.status(200).render('pages/home', {
       title: 'Ana Sayfa',
       description: 'Optik Ayşegül Özçelik, Başakşehir’de bir optik mağazasıdır. Öne çıkan modeller katalogdan gelir.',
-      featuredProducts
+      featuredProducts,
+      instagramPosts: instagramPosts()
     });
   } catch (error) {
     next(error);

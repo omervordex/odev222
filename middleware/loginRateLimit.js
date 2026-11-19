@@ -1,3 +1,5 @@
+// Attempts are remembered in this function instance only. On Netlify that
+// counter resets on a cold start and is not shared by every instance.
 const WINDOW_MS = 15 * 60 * 1000;
 const MAX_ATTEMPTS = 5;
 const attempts = new Map();

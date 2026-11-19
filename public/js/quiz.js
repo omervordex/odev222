@@ -11,91 +11,117 @@
       id: 'style',
       text: 'Hangi tarz sana daha yakın?',
       options: [
-        ['minimal', 'Minimal ve modern', '/images/demo-studio-round.jpg'],
-        ['classic', 'Klasik ve zamansız', '/images/demo-archive-browline.jpg'],
-        ['bold', 'Cesur ve dikkat çekici', '/images/demo-atelier-cateye.jpg'],
-        ['elegant', 'Zarif ve sofistike', '/images/demo-gallery-portrait.jpg']
+        ['minimal', 'Minimal ve modern'],
+        ['classic', 'Klasik ve zamansız'],
+        ['bold', 'Cesur ve dikkat çekici'],
+        ['elegant', 'Zarif ve sofistike']
       ]
     },
     {
       id: 'shape',
       text: 'Hangi çerçeve şekli hoşuna gidiyor?',
       options: [
-        ['round', 'Yuvarlak', '/images/demo-harbor-round.jpg'],
-        ['square', 'Kare', '/images/demo-quiet-square.jpg'],
-        ['rectangle', 'Dikdörtgen', '/images/demo-archive-browline.jpg'],
-        ['cat-eye', 'Cat-eye', '/images/demo-atelier-cateye.jpg'],
-        ['aviator', 'Aviator', '/images/demo-open-aviator.jpg']
+        ['round', 'Yuvarlak'],
+        ['square', 'Kare'],
+        ['rectangle', 'Dikdörtgen'],
+        ['cat-eye', 'Cat-eye'],
+        ['aviator', 'Aviator']
       ]
     },
     {
       id: 'material',
       text: 'Hangi çerçeve materyalini tercih edersin?',
       options: [
-        ['metal', 'İnce metal', '/images/demo-studio-round.jpg'],
-        ['acetate', 'Asetat', '/images/demo-atelier-cateye.jpg'],
-        ['light', 'Hafif ve minimal çerçeveler', '/images/demo-open-aviator.jpg'],
-        ['any', 'Fark etmez', '/images/category-optical.jpg']
+        ['metal', 'İnce metal'],
+        ['acetate', 'Asetat'],
+        ['light', 'Hafif ve minimal çerçeveler'],
+        ['any', 'Fark etmez']
       ]
     },
     {
       id: 'occasion',
       text: 'Gözlüğü en çok nerede kullanacaksın?',
       options: [
-        ['everyday', 'Günlük kullanım', '/images/demo-studio-round.jpg'],
-        ['work', 'İş ve profesyonel ortamlar', '/images/demo-archive-browline.jpg'],
-        ['fashion', 'Moda ve özel günler', '/images/demo-gallery-portrait.jpg'],
-        ['outdoor', 'Açık hava aktiviteleri', '/images/demo-neon-round.jpg']
+        ['everyday', 'Günlük kullanım'],
+        ['work', 'İş ve profesyonel ortamlar'],
+        ['fashion', 'Moda ve özel günler'],
+        ['outdoor', 'Açık hava aktiviteleri']
       ]
     },
     {
       id: 'color',
       text: 'Hangi renkleri tercih edersin?',
       options: [
-        ['black', 'Siyah', '/images/demo-quiet-square.jpg'],
-        ['silver', 'Gümüş veya metalik', '/images/demo-open-aviator.jpg'],
-        ['clear', 'Şeffaf', '/images/category-contacts.jpg'],
-        ['brown', 'Kahverengi veya desenli', '/images/demo-harbor-round.jpg'],
-        ['any', 'Fark etmez', '/images/category-optical.jpg']
+        ['black', 'Siyah'],
+        ['silver', 'Gümüş veya metalik'],
+        ['clear', 'Şeffaf'],
+        ['brown', 'Kahverengi veya desenli'],
+        ['any', 'Fark etmez']
       ]
     },
     {
       id: 'looking',
       text: 'Ne tür gözlük arıyorsun?',
       options: [
-        ['prescription', 'Numaralı gözlük', '/images/category-optical.jpg'],
-        ['sunglasses', 'Güneş gözlüğü', '/images/category-sunglasses.jpg'],
-        ['both', 'Her ikisi', '/images/demo-mirror-round.jpg'],
-        ['exploring', 'Sadece tarzları keşfediyorum', '/images/hero-editorial.jpg']
+        ['prescription', 'Numaralı gözlük'],
+        ['sunglasses', 'Güneş gözlüğü'],
+        ['both', 'Her ikisi'],
+        ['exploring', 'Sadece tarzları keşfediyorum']
       ]
     }
   ];
 
-  const styleProducts = {
-    round: ['studio-round', 'harbor-round', 'neon-round', 'mirror-round'],
-    rectangular: ['archive-browline'],
-    square: ['quiet-square'],
-    aviator: ['open-aviator'],
-    'cat-eye': ['atelier-cat-eye', 'gallery-portrait'],
-    'minimal-metal': ['studio-round', 'harbor-round']
-  };
-
   const labels = {
-    round: 'Yuvarlak Çerçeveler',
-    rectangular: 'Dikdörtgen Çerçeveler',
-    square: 'Kare Çerçeveler',
-    aviator: 'Aviator Modeller',
-    'cat-eye': 'Cat-eye Modeller',
-    'minimal-metal': 'Minimal Metal Çerçeveler'
+    classic: 'Klasik ve Zamansız Çerçeveler',
+    modern: 'Modern ve Minimal Çerçeveler',
+    bold: 'Cesur ve Dikkat Çekici Çerçeveler',
+    round: 'Yuvarlak ve Vintage Çerçeveler',
+    cateye: 'Zarif Cat-Eye Çerçeveler',
+    sporty: 'Sportif ve Günlük Çerçeveler'
   };
 
   const resultImages = {
-    round: '/images/demo-studio-round.jpg',
-    rectangular: '/images/demo-archive-browline.jpg',
-    square: '/images/demo-quiet-square.jpg',
-    aviator: '/images/demo-open-aviator.jpg',
-    'cat-eye': '/images/demo-atelier-cateye.jpg',
-    'minimal-metal': '/images/demo-studio-round.jpg'
+    classic: {
+      src: '/images/demo-archive-browline.jpg',
+      alt: 'Kaplumbağa desenli klasik kaş üstü numaralı gözlük.'
+    },
+    modern: {
+      src: '/images/Crystal%20Frames%20on%20Travertine%20Stone-1.png',
+      alt: 'Traverten üzerinde şeffaf, ince ve modern bir numaralı gözlük.'
+    },
+    bold: {
+      src: '/images/Tortoiseshell%20Sunglasses%20in%20Warm%20Sunlight-2.png',
+      alt: 'Kalın kaplumbağa desenli, köşeli bir güneş gözlüğü.'
+    },
+    round: {
+      src: '/images/demo-studio-round.jpg',
+      alt: 'İnce metal yuvarlak numaralı gözlük.'
+    },
+    cateye: {
+      src: '/images/demo-gallery-portrait.jpg',
+      alt: 'Siyah, kalkık köşeli cat-eye gözlük.'
+    },
+    sporty: {
+      src: '/images/demo-quiet-square.jpg',
+      alt: 'Kare formlu, günlük kullanıma uygun bir güneş gözlüğü.'
+    }
+  };
+
+  const styleProducts = {
+    classic: ['archive-browline'],
+    modern: ['studio-round'],
+    bold: ['quiet-square'],
+    round: ['studio-round', 'harbor-round', 'neon-round', 'mirror-round'],
+    cateye: ['atelier-cat-eye', 'gallery-portrait'],
+    sporty: ['open-aviator', 'quiet-square']
+  };
+
+  const shapeCategory = {
+    round: 'round',
+    square: 'bold',
+    rectangle: 'classic',
+    'cat-eye': 'cateye',
+    aviator: 'sporty'
   };
 
   const ask = root.querySelector('[data-quiz-ask]');
@@ -116,12 +142,12 @@
 
   function scoreAnswers() {
     const scores = {
+      classic: 0,
+      modern: 0,
+      bold: 0,
       round: 0,
-      rectangular: 0,
-      square: 0,
-      aviator: 0,
-      'cat-eye': 0,
-      'minimal-metal': 0
+      cateye: 0,
+      sporty: 0
     };
     const style = answers.style;
     const shape = answers.shape;
@@ -131,89 +157,97 @@
     const looking = answers.looking;
 
     if (style === 'minimal') {
-      add(scores, 'minimal-metal', 2);
-      add(scores, 'rectangular', 1);
+      add(scores, 'modern', 3);
+      add(scores, 'round', 1);
     } else if (style === 'classic') {
-      add(scores, 'rectangular', 2);
+      add(scores, 'classic', 3);
       add(scores, 'round', 1);
     } else if (style === 'bold') {
-      add(scores, 'square', 2);
-      add(scores, 'cat-eye', 1);
+      add(scores, 'bold', 3);
+      add(scores, 'cateye', 1);
     } else if (style === 'elegant') {
-      add(scores, 'cat-eye', 2);
-      add(scores, 'round', 1);
+      add(scores, 'cateye', 3);
+      add(scores, 'classic', 1);
     }
 
-    const shapeKey = shape === 'rectangle' ? 'rectangular' : shape;
-    if (scores[shapeKey] !== undefined) {
-      add(scores, shapeKey, 4);
-    }
     if (shape === 'round') {
-      add(scores, 'minimal-metal', 1);
+      add(scores, 'round', 4);
+      add(scores, 'modern', 1);
+    } else if (shape === 'square') {
+      add(scores, 'bold', 3);
+      add(scores, 'sporty', 2);
+    } else if (shape === 'rectangle') {
+      add(scores, 'classic', 4);
+    } else if (shape === 'cat-eye') {
+      add(scores, 'cateye', 4);
+      add(scores, 'bold', 1);
+    } else if (shape === 'aviator') {
+      add(scores, 'sporty', 4);
+      add(scores, 'modern', 1);
     }
 
     if (material === 'metal') {
-      add(scores, 'minimal-metal', 3);
-      add(scores, 'aviator', 1);
+      add(scores, 'modern', 3);
+      add(scores, 'sporty', 1);
       add(scores, 'round', 1);
     } else if (material === 'acetate') {
-      add(scores, 'square', 2);
-      add(scores, 'cat-eye', 1);
-      add(scores, 'rectangular', 1);
+      add(scores, 'bold', 2);
+      add(scores, 'cateye', 2);
+      add(scores, 'classic', 1);
     } else if (material === 'light') {
-      add(scores, 'minimal-metal', 3);
-      add(scores, 'rectangular', 1);
+      add(scores, 'modern', 3);
+      add(scores, 'classic', 1);
     }
 
     if (occasion === 'everyday') {
-      add(scores, 'rectangular', 2);
-      add(scores, 'minimal-metal', 1);
+      add(scores, 'modern', 2);
+      add(scores, 'classic', 1);
     } else if (occasion === 'work') {
-      add(scores, 'rectangular', 2);
-      add(scores, 'square', 1);
+      add(scores, 'classic', 3);
+      add(scores, 'modern', 1);
     } else if (occasion === 'fashion') {
-      add(scores, 'cat-eye', 2);
-      add(scores, 'round', 1);
+      add(scores, 'cateye', 2);
+      add(scores, 'bold', 2);
     } else if (occasion === 'outdoor') {
-      add(scores, 'aviator', 3);
-      add(scores, 'square', 1);
+      add(scores, 'sporty', 4);
     }
 
     if (color === 'black') {
-      add(scores, 'square', 1);
-      add(scores, 'rectangular', 1);
+      add(scores, 'classic', 1);
+      add(scores, 'bold', 1);
+      add(scores, 'cateye', 1);
     } else if (color === 'silver') {
-      add(scores, 'minimal-metal', 2);
-      add(scores, 'aviator', 1);
+      add(scores, 'modern', 2);
+      add(scores, 'sporty', 1);
     } else if (color === 'clear') {
-      add(scores, 'minimal-metal', 1);
-      add(scores, 'rectangular', 1);
+      add(scores, 'modern', 3);
     } else if (color === 'brown') {
+      add(scores, 'classic', 2);
       add(scores, 'round', 1);
-      add(scores, 'cat-eye', 1);
+      add(scores, 'bold', 1);
     }
 
     if (looking === 'prescription') {
-      add(scores, 'rectangular', 1);
-      add(scores, 'minimal-metal', 1);
+      add(scores, 'classic', 1);
+      add(scores, 'modern', 1);
     } else if (looking === 'sunglasses') {
-      add(scores, 'aviator', 2);
-      add(scores, 'square', 1);
+      add(scores, 'sporty', 2);
+      add(scores, 'bold', 1);
     } else if (looking === 'both') {
       add(scores, 'round', 1);
-      add(scores, 'aviator', 1);
+      add(scores, 'sporty', 1);
     }
 
     const ranked = Object.keys(scores).sort(function (left, right) {
       return scores[right] - scores[left];
     });
     let winner = ranked[0];
-    const explicit = shapeKey && scores[shapeKey] !== undefined ? shapeKey : '';
+    const explicit = shapeCategory[shape] || '';
     if (explicit && scores[winner] - scores[explicit] <= 1) {
       winner = explicit;
     }
 
-    return { winner: winner, scores: scores };
+    return winner;
   }
 
   function explain(winner) {
@@ -234,16 +268,18 @@
       everyday: 'günlük kullanım',
       work: 'iş ve profesyonel ortamlar',
       fashion: 'moda ve özel günler',
-      outdoor: 'açık hava aktiviteleri'
+      outdoor: 'açık hava'
     };
-    const lookText = {
-      prescription: 'Numaralı gözlük aradığını belirttin.',
-      sunglasses: 'Güneş gözlüğü aradığını belirttin.',
-      both: 'Hem numaralı gözlük hem güneş gözlüğü için açık olduğunu belirttin.',
-      exploring: 'Şimdilik tarzları keşfettiğini belirttin.'
+    const reason = {
+      classic: 'Dengeli çizgiler ve zamansız bir duruş öne çıkıyor.',
+      modern: 'Sade çizgiler ve hafif bir görünüm öne çıkıyor.',
+      bold: 'Daha güçlü bir form ve dikkat çeken bir duruş öne çıkıyor.',
+      round: 'Yumuşak, yuvarlak hatlar öne çıkıyor.',
+      cateye: 'Kalkık ve zarif bir çerçeve çizgisi öne çıkıyor.',
+      sporty: 'Rahat ve hareketli kullanıma uygun bir form öne çıkıyor.'
     };
 
-    return 'Seçimlerin ' + styleText[answers.style] + ' bir tarza, ' + shapeText[answers.shape] + ' bir forma ve ' + useText[answers.occasion] + ' kullanımına işaret ediyor. Buna göre öne çıkan stil: ' + labels[winner] + '. ' + (lookText[answers.looking] || '') + ' Puanlar yakınsa işaretlediğin çerçeve şekli daha fazla ağırlık aldı.';
+    return 'Seçimlerin ' + styleText[answers.style] + ' bir tarza, ' + shapeText[answers.shape] + ' bir forma ve ' + useText[answers.occasion] + ' ihtiyacına işaret ediyor. ' + reason[winner];
   }
 
   function render() {
@@ -254,16 +290,10 @@
     options.innerHTML = '';
     current.options.forEach(function (option) {
       const button = document.createElement('button');
-      const photo = document.createElement('img');
-      const label = document.createElement('span');
       button.type = 'button';
       button.className = 'quiz-card' + (answers[current.id] === option[0] ? ' is-selected' : '');
       button.setAttribute('aria-pressed', answers[current.id] === option[0] ? 'true' : 'false');
-      photo.src = option[2];
-      photo.alt = '';
-      label.textContent = option[1];
-      button.appendChild(photo);
-      button.appendChild(label);
+      button.textContent = option[1];
       button.addEventListener('click', function () {
         answers[current.id] = option[0];
         render();
@@ -280,23 +310,23 @@
   }
 
   function showResult() {
-    const outcome = scoreAnswers();
-    const slugs = styleProducts[outcome.winner] || [];
+    const winner = scoreAnswers();
+    const image = resultImages[winner];
+    const slugs = styleProducts[winner] || [];
     const picks = slugs.map(function (slug) {
       return catalog.find(function (product) {
         return product.slug === slug;
       });
     }).filter(Boolean);
-    const lead = picks[0];
-    const image = root.querySelector('[data-result-image]');
+    const photo = root.querySelector('[data-result-image]');
     const title = root.querySelector('[data-result-title]');
     const copy = root.querySelector('[data-result-copy]');
     const list = root.querySelector('[data-result-products]');
 
-    title.textContent = labels[outcome.winner];
-    copy.textContent = explain(outcome.winner);
-    image.src = lead && lead.image ? lead.image : resultImages[outcome.winner];
-    image.alt = lead ? lead.name : labels[outcome.winner];
+    title.textContent = labels[winner];
+    copy.textContent = explain(winner);
+    photo.src = image.src;
+    photo.alt = image.alt;
     list.innerHTML = '';
     picks.forEach(function (product) {
       const link = document.createElement('a');
@@ -304,11 +334,6 @@
       link.textContent = product.name + (product.category ? ' · ' + product.category : '');
       list.appendChild(link);
     });
-    if (!picks.length) {
-      const note = document.createElement('p');
-      note.textContent = 'Tanıtım kataloğunda bu stile yakın bir örnek henüz yok.';
-      list.appendChild(note);
-    }
     ask.hidden = true;
     result.hidden = false;
   }

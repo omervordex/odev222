@@ -1,0 +1,28 @@
+[build]
+  command = "npm run build:static"
+  publish = "public"
+  functions = "netlify/functions"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+[functions]
+  node_bundler = "esbuild"
+  external_node_modules = [
+    "express",
+    "ejs",
+    "@supabase/supabase-js",
+    "serverless-http",
+    "cookie-session",
+    "multer",
+    "bcryptjs",
+    "helmet",
+    "express-validator"
+  ]
+  included_files = ["views/**/*.ejs"]
+
+# Existing files in public/ are served by the CDN. Everything else goes to Express.
+[[redirects]]
+  from = "/*"
+  to = "/.netlify/functions/server/:splat"
+  status = 200

@@ -2,7 +2,7 @@
 <div class="page-header mb-3">
   <h2 class="page-title"><%= product.id ? 'Ürünü düzenle' : 'Ürün ekle' %></h2>
 </div>
-<form class="card" method="post" action="<%= product.id ? '/admin/products/' + product.id : '/admin/products' %>" novalidate>
+<form class="card" method="post" action="<%= product.id ? '/admin/products/' + product.id : '/admin/products' %>" enctype="multipart/form-data" novalidate>
   <div class="card-body">
     <input type="hidden" name="_csrf" value="<%= csrfToken %>">
     <div class="row g-3">
@@ -36,9 +36,35 @@
         <input class="form-control" id="price" name="price" value="<%= product.price %>" inputmode="decimal" placeholder="Gizlemek için boş bırakın">
         <% if (errors.price) { %><div class="text-danger small mt-1"><%= errors.price %></div><% } %>
       </div>
+      <div class="col-12">
+        <div class="image-picker" data-image-picker data-current="<%= product.imageUrl %>">
+          <label class="form-label" for="image_file">Ürün görseli</label>
+          <div class="image-drop" data-image-drop>
+            <% if (product.imageUrl) { %>
+              <img data-image-preview alt="<%= product.name ? product.name + ' görseli' : 'Kayıtlı görsel' %>" src="<%= product.imageUrl %>">
+            <% } else { %>
+              <img data-image-preview alt="Seçilen görsel" hidden>
+            <% } %>
+            <p data-image-empty <%= product.imageUrl ? 'hidden' : '' %>>Görseli buraya bırakın veya dosya seçin. JPG, PNG veya WEBP. En fazla 5 MB.</p>
+            <input id="image_file" data-image-input type="file" name="image_file" accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp">
+          </div>
+          <div class="d-flex flex-wrap gap-2 mt-2">
+            <button class="btn btn-sm" type="button" data-image-clear>Seçimi temizle</button>
+          </div>
+          <p class="text-danger small mt-2" data-image-note></p>
+          <% if (errors.image_file) { %><div class="text-danger small mt-1"><%= errors.image_file %></div><% } %>
+          <% if (product.imageUrl) { %>
+            <label class="form-check mt-2">
+              <input class="form-check-input" type="checkbox" name="remove_image" value="1" data-image-remove>
+              <span class="form-check-label">Kayıtlı görseli kaldır</span>
+            </label>
+          <% } %>
+        </div>
+      </div>
       <div class="col-md-6">
-        <label class="form-label" for="image_url">Görsel adresi</label>
-        <input class="form-control" id="image_url" name="image_url" value="<%= product.imageUrl %>" placeholder="/images/… veya https://">
+        <label class="form-label" for="image_url">Görsel adresi <span class="text-secondary">(isteğe bağlı)</span></label>
+        <input class="form-control" id="image_url" name="image_url" value="<%= product.imageUrl %>" placeholder="https://… veya /images/…">
+        <div class="form-hint">Dosya seçerseniz bu adres yerine yüklenen görsel kullanılır.</div>
         <% if (errors.image_url) { %><div class="text-danger small mt-1"><%= errors.image_url %></div><% } %>
       </div>
       <div class="col-12">

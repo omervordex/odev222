@@ -4,6 +4,7 @@ const categoryModel = require('../models/categoryModel');
 const slugify = require('../models/slug');
 const { fieldErrors } = require('../validators/adminForms');
 const { setFlash } = require('../middleware/requireAdmin');
+const productImages = require('../middleware/productImages');
 
 function blankProduct() {
   return {
@@ -51,6 +52,28 @@ function formProduct(record) {
     imageUrl: record.imageUrl,
     isFeatured: record.isFeatured
   };
+}
+
+function applyImageChoice(req, product) {
+  if (req.uploadedImagePath) {
+    product.imageUrl = req.uploadedImagePath;
+  }
+
+  return product;
+}
+
+async function rejectProductForm(req, res, title, product, errors, existing) {
+  if (req.uploadedImagePath) {
+    await productImages.discardUpload(req);
+    req.uploadedImagePath = '';
+    req.file = undefined;
+    product.imageUrl = existing ? existing.imageUrl : '';
+    if (!errors.image_file) {
+      errors.image_file = 'Seçilen görsel kaydedilmedi. Diğer alanları düzelttikten sonra yeniden seçin.';
+    }
+  }
+
+  await renderForm(res, 400, title, product, errors);
 }
 
 async function renderForm(res, status, title, product, errors) {
@@ -107,18 +130,24 @@ async function createForm(req, res, next) {
 }
 
 async function create(req, res, next) {
-  const product = valuesFrom(req.body);
+  const product = applyImageChoice(req, valuesFrom(req.body));
+  let saved = false;
 
   try {
+    if (req.imageUploadError) {
+      await rejectProductForm(req, res, 'Ürün ekle', product, { image_file: req.imageUploadError }, null);
+      return;
+    }
+
     const result = validationResult(req);
     if (!result.isEmpty()) {
-      await renderForm(res, 400, 'Ürün ekle', product, fieldErrors(result));
+      await rejectProductForm(req, res, 'Ürün ekle', product, fieldErrors(result), null);
       return;
     }
 
     const resolved = await resolveSlug(product, '');
     if (resolved.error) {
-      await renderForm(res, 400, 'Ürün ekle', product, { slug: resolved.error });
+      await rejectProductForm(req, res, 'Ürün ekle', product, { slug: resolved.error }, null);
       return;
     }
 
@@ -127,10 +156,15 @@ async function create(req, res, next) {
       slug: resolved.slug,
       price: product.price === '' ? null : Number(product.price)
     });
+    saved = true;
     setFlash(req, 'Ürün kaydedildi.');
     res.redirect(303, '/admin/products');
   } catch (error) {
+    if (!saved) {
+      await productImages.discardUpload(req).catch(() => {});
+    }
     if (error.status === 400) {
+      product.imageUrl = '';
       await renderForm(res, 400, 'Ürün ekle', product, { slug: error.message });
       return;
     }
@@ -157,40 +191,59 @@ async function editForm(req, res, next) {
 }
 
 async function update(req, res, next) {
-  const product = valuesFrom(req.body);
+  const product = applyImageChoice(req, valuesFrom(req.body));
   product.id = req.params.id;
+  let existing = null;
+  let saved = false;
 
   try {
     if (validationResult(req).array().some((item) => item.path === 'id')) {
       throw missingRecord();
     }
 
-    const existing = await productModel.findById(req.params.id);
+    existing = await productModel.findById(req.params.id);
     if (!existing) {
       throw missingRecord();
     }
 
+    if (req.imageUploadError) {
+      product.imageUrl = existing.imageUrl;
+      await rejectProductForm(req, res, 'Ürünü düzenle', product, { image_file: req.imageUploadError }, existing);
+      return;
+    }
+
     const result = validationResult(req);
     if (!result.isEmpty()) {
-      await renderForm(res, 400, 'Ürünü düzenle', product, fieldErrors(result));
+      await rejectProductForm(req, res, 'Ürünü düzenle', product, fieldErrors(result), existing);
       return;
     }
 
     const resolved = await resolveSlug(product, existing.id);
     if (resolved.error) {
-      await renderForm(res, 400, 'Ürünü düzenle', product, { slug: resolved.error });
+      await rejectProductForm(req, res, 'Ürünü düzenle', product, { slug: resolved.error }, existing);
       return;
     }
 
+    const previousImage = existing.imageUrl;
     await productModel.update(existing.id, {
       ...product,
       slug: resolved.slug,
       price: product.price === '' ? null : Number(product.price)
     });
+    saved = true;
+    await productImages.releaseReplacedImage(previousImage, product.imageUrl).catch(() => {
+      console.error('Stored product image could not be removed.');
+    });
     setFlash(req, 'Ürün güncellendi.');
     res.redirect(303, '/admin/products');
   } catch (error) {
+    if (!saved) {
+      await productImages.discardUpload(req).catch(() => {});
+    }
     if (error.status === 400) {
+      if (existing) {
+        product.imageUrl = existing.imageUrl;
+      }
       await renderForm(res, 400, 'Ürünü düzenle', product, { slug: error.message });
       return;
     }
@@ -210,7 +263,11 @@ async function remove(req, res, next) {
       throw missingRecord();
     }
 
+    const previousImage = product.imageUrl;
     await productModel.remove(product.id);
+    await productImages.releaseReplacedImage(previousImage, '').catch(() => {
+      console.error('Stored product image could not be removed.');
+    });
     setFlash(req, 'Ürün silindi. İlgili mesajlar ürün bağlantısı olmadan durur.');
     res.redirect(303, '/admin/products');
   } catch (error) {

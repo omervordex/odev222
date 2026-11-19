@@ -2,7 +2,7 @@
 
 University web project for the optical boutique Optik Ayşegül Özçelik in Başakşehir, Istanbul. The public name is a text wordmark. No official logo file has been supplied.
 
-This repository is at **stage 3**: the public boutique pages read categories and products from Supabase. Admin login and product editing are not built yet.
+The public boutique pages read categories and products from Supabase. Administrators manage products, categories, and contact messages at `/admin`.
 
 ## How to run
 
@@ -33,7 +33,10 @@ Copy `.env.example` to `.env`. Real values stay in `.env`, which Git ignores.
 | --- | --- |
 | `SUPABASE_URL` | Server-side Supabase client |
 | `SUPABASE_SECRET_KEY` | Server-side client only. Bypasses Row Level Security |
-| `SUPABASE_PUBLISHABLE_KEY` | Stored for a future browser client. Not sent to pages in this stage |
+| `SUPABASE_PUBLISHABLE_KEY` | Stored for a future browser client. Not sent to pages |
+| `SESSION_SECRET` | Signs the admin session cookie. Required |
+| `UPLOAD_STORAGE` | `auto`, `local`, or `supabase`. See `.env.example` |
+| `SUPABASE_STORAGE_BUCKET` | Optional. Defaults to `product-images` |
 
 Do not print the secret key, put it in EJS or frontend JavaScript, or commit `.env`.
 
@@ -65,7 +68,8 @@ The SQL file creates `admins`, `categories`, `products`, and `inquiries`, with p
 | dotenv | Loads `.env` into `process.env` |
 | nodemon | Restarts the server during development |
 | @supabase/supabase-js | Server-side database client in `config/supabase.js` |
-| express-session | Admin sign-in cookie. The default store is in-memory |
+| cookie-session | Signed admin cookie. Works across separate Netlify function instances |
+| serverless-http | Runs this Express app as a Netlify Function |
 | bcryptjs | Hashes administrator passwords |
 | express-validator | Validates public inquiries and admin forms |
 
@@ -94,10 +98,15 @@ Also set `SESSION_SECRET` in `.env` to a long random string. The server will not
 
 Sign in at http://localhost:3000/admin/login. From there you can manage products, categories, and inquiry statuses. Deleting a category is refused while products still use it.
 
-The session store is Express’s built-in memory store. Sessions disappear when the process restarts, and they are not shared by multiple servers. That is a deployment blocker. Do not treat the admin login as production-ready until a shared session store is added.
+The admin id, CSRF token, and flash message are stored in a signed `optical.sid` cookie (`HttpOnly`, `SameSite=Lax`, 8 hours). In production the cookie is also `Secure`, so the browser only keeps it on HTTPS. The cookie is not a place for passwords or Supabase keys. Login and contact rate limits still live in process memory. On Netlify each function instance has its own counter, so those limits are best-effort.
+
+Administrators can upload a product image from the product form. JPG, PNG, and WEBP files up to 5 MB are accepted after the file contents are checked. An https image address remains optional.
+
+With `UPLOAD_STORAGE=auto`, `npm run dev` stores files on disk at `public/uploads/products/` and saves that public path in the existing `image_url` column. Netlify cannot keep those files, so the deployed site uploads to the public Supabase Storage bucket `product-images` and saves the public URL instead. The server creates that bucket on the first upload. Existing `/images/...` and `/uploads/products/...` values are left as they are. Disk files in `public/uploads/products/` are gitignored, so a Git-based Netlify deploy does not include them. A product that points at one of those paths will show a missing image until the file is uploaded again from the admin form.
 
 ## External libraries
 
+- [Multer](https://github.com/expressjs/multer) (MIT) accepts product image uploads from the admin form.
 - [Bootstrap 5.3](https://getbootstrap.com/) (MIT) provides the public responsive grid. It is served at `/vendor/bootstrap`.
 - [Tabler Core 1.7](https://github.com/tabler/tabler) (MIT) provides the admin layout, cards, tables, and forms. It is served at `/vendor/tabler` and is not used on the public storefront.
 - Photographs in `public/images/` are replaceable stock images, not official store photographs. Fonts in `public/fonts/` are self-hosted Cormorant Garamond and Manrope files.
@@ -114,9 +123,37 @@ The session store is Express’s built-in memory store. Sessions disappear when 
   - `demo-archive-browline.jpg` and `category-optical.jpg` — https://unsplash.com/photos/1574258495973-f010dfbb5371
   - `demo-harbor-round.jpg` and `category-sunglasses.jpg` — https://unsplash.com/photos/1511499767150-a48a237f0083
 
+## Netlify demo
+
+Do not commit `.env`. In the Netlify UI, set these environment variables for the site (production and deploy previews):
+
+| Name | Required | Notes |
+| --- | --- | --- |
+| `SESSION_SECRET` | Yes | Long random string. Different from any password |
+| `SUPABASE_URL` | Yes | Server only |
+| `SUPABASE_SECRET_KEY` | Yes | Server only. Never add it to the frontend |
+| `SUPABASE_PUBLISHABLE_KEY` | No | Not rendered. Safe to omit until a browser client exists |
+| `UPLOAD_STORAGE` | No | Leave unset or set `auto`. Netlify then uses Supabase Storage |
+| `SUPABASE_STORAGE_BUCKET` | No | Defaults to `product-images` |
+| `NODE_ENV` | No | Netlify sets `production` |
+
+`ADMIN_EMAIL` and `ADMIN_PASSWORD` are only for `npm run admin:create` on your computer. Run that once against this Supabase project before the demo. The Netlify site then accepts that same administrator. Do not add the password to Netlify.
+
+Publish steps, without changing application data:
+
+1. Push the project to a private Git repository when you are ready. Leave `.env` untracked. `.gitignore` already excludes it.
+2. In Netlify, import that repository. The `netlify.toml` build command is `npm run build:static`, the publish directory is `public`, and functions live in `netlify/functions`.
+3. Add the environment variables above, then deploy.
+4. Open the Netlify URL. Check `/`, `/products`, a product page, `/contact`, and `/admin/login`.
+5. Sign in and upload a product image. The new `image_url` should be an `https` address on your Supabase project. Older disk paths stay unchanged.
+
+`netlify.toml` sends requests that are not real files to the Express function. CSS, JavaScript, fonts, and pictures in `public/` are served from the CDN. Bootstrap and Tabler are copied into `public/vendor/` by `npm run build:static` (also `postinstall`).
+
+Netlify’s free functions have a short execution limit and a request body of about 6 MB. A product image near 5 MB can exceed that after encoding. Use images under about 4 MB on the demo. The contact form and admin forms are ordinary server-rendered pages; there is no separate API process to keep awake.
+
 ## Folder guide
 
-- `app.js` starts Express.
+- `app.js` builds Express and starts listening only when it is the main program. Netlify imports it through `netlify/functions/server.js`.
 - `config/` reads environment settings and creates the Supabase client.
 - `routes/` maps URLs to controllers.
 - `controllers/` prepares the response.

@@ -18,3 +18,13 @@ Thumbs.db
 # Editor
 .vscode/
 .idea/
+
+# Uploaded product images stay on the local disk and are not committed.
+public/uploads/products/*
+!public/uploads/products/.gitkeep
+
+# Generated for the Netlify CDN. Rebuilt by npm run build:static.
+public/vendor/
+
+# Local Netlify CLI state
+.netlify/

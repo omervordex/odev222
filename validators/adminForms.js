@@ -109,7 +109,7 @@ const productValidators = [
         return true;
       }
 
-      throw new Error('http veya https bir görsel adresi, /images/ içindeki bir dosya girin ya da alanı boş bırakın.');
+      throw new Error('http veya https bir adres, /images/ içindeki bir dosya girin ya da alanı boş bırakın.');
     }),
   body('is_featured').optional({ values: 'falsy' })
 ];

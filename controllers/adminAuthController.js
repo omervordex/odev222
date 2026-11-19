@@ -2,6 +2,7 @@ const bcrypt = require('bcryptjs');
 const { validationResult } = require('express-validator');
 const adminModel = require('../models/adminModel');
 const { fieldErrors } = require('../validators/adminForms');
+const { clearAdminCookie } = require('../middleware/adminSession');
 
 const GENERIC_LOGIN_ERROR = 'E-posta veya şifre doğru değil.';
 let dummyHash = '';
@@ -84,7 +85,7 @@ function logout(req, res, next) {
       return;
     }
 
-    res.clearCookie('optical.sid');
+    clearAdminCookie(res);
     res.redirect(303, '/admin/login');
   });
 }

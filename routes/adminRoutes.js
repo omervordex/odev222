@@ -7,6 +7,7 @@ const adminInquiryController = require('../controllers/adminInquiryController');
 const { requireAdmin, readFlash } = require('../middleware/requireAdmin');
 const { ensureCsrf, verifyCsrf } = require('../middleware/csrf');
 const loginRateLimit = require('../middleware/loginRateLimit');
+const { uploadProductImage, preferUploadedFile } = require('../middleware/productUpload');
 const {
   loginValidators,
   categoryValidators,
@@ -29,10 +30,10 @@ router.get('/', adminDashboardController.dashboard);
 
 router.get('/products', adminProductController.list);
 router.get('/products/new', adminProductController.createForm);
-router.post('/products', verifyCsrf, productValidators, adminProductController.create);
+router.post('/products', uploadProductImage, preferUploadedFile, verifyCsrf, productValidators, adminProductController.create);
 router.get('/products/:id/edit', idParam, adminProductController.editForm);
 router.post('/products/:id/delete', verifyCsrf, idParam, adminProductController.remove);
-router.post('/products/:id', verifyCsrf, idParam, productValidators, adminProductController.update);
+router.post('/products/:id', uploadProductImage, preferUploadedFile, verifyCsrf, idParam, productValidators, adminProductController.update);
 
 router.get('/categories', adminCategoryController.list);
 router.get('/categories/new', adminCategoryController.createForm);
@@ -44,5 +45,6 @@ router.post('/categories/:id', verifyCsrf, idParam, categoryValidators, adminCat
 router.get('/inquiries', adminInquiryController.list);
 router.get('/inquiries/:id', idParam, adminInquiryController.detail);
 router.post('/inquiries/:id/status', verifyCsrf, idParam, statusValidators, adminInquiryController.updateStatus);
+router.post('/inquiries/:id/delete', verifyCsrf, idParam, adminInquiryController.remove);
 
 module.exports = router;

@@ -1,6 +1,7 @@
 /**
  * Limits repeated contact posts from one address and ignores cross-site form posts.
  * The memory store is enough for one server process and resets when the process restarts.
+ * On Netlify it is per function instance, so it is a best-effort limit rather than a shared counter.
  */
 const WINDOW_MS = 15 * 60 * 1000;
 const MAX_POSTS = 10;

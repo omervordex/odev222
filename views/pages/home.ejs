@@ -55,7 +55,7 @@
       <p class="demo-note">Tanıtım kategorileri. Bu kartlar doğrulanmış bir stok listesi değildir.</p>
       <div class="category-row">
         <a class="category-tile" href="/products?category=optical-frames">
-          <img src="/images/category-optical.jpg" alt="Kaş üstü numaralı gözlük çerçevesi.">
+          <span class="category-photo category-photo--optical" aria-hidden="true"></span>
           <div>
             <h3>Numaralı Gözlük Çerçeveleri</h3>
             <p>Sunum için örnek numaralı gözlük çerçeveleri.</p>
@@ -63,7 +63,7 @@
           </div>
         </a>
         <a class="category-tile" href="/products?category=sunglasses">
-          <img src="/images/category-sunglasses.jpg" alt="Mermer üzerinde yuvarlak metal güneş gözlüğü.">
+          <span class="category-photo category-photo--sunglasses" aria-hidden="true"></span>
           <div>
             <h3>Güneş Gözlükleri</h3>
             <p>Sunum için örnek güneş gözlükleri.</p>
@@ -71,7 +71,7 @@
           </div>
         </a>
         <a class="category-tile" href="/products?category=contact-lenses">
-          <img src="/images/category-contacts.jpg" alt="Beyaz yüzeyde şeffaf deneme lensleri.">
+          <span class="category-photo category-photo--contacts" aria-hidden="true"></span>
           <div>
             <h3>Kontakt Lensler</h3>
             <p>Tanıtım kategorisi. Listelenen bir kontakt lens ürünü yok.</p>
@@ -79,7 +79,7 @@
           </div>
         </a>
         <a class="category-tile" href="/products?category=kids-eyewear">
-          <img src="/images/category-kids.jpg" alt="Renkli asetat çerçeveler.">
+          <span class="category-photo category-photo--kids" aria-hidden="true"></span>
           <div>
             <h3>Çocuk Gözlükleri</h3>
             <p>Tanıtım kategorisi. Listelenen bir çocuk gözlüğü yok.</p>
@@ -90,10 +90,50 @@
     </div>
   </section>
 
+  <section class="section" aria-labelledby="instagram-heading">
+    <div class="shell">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Instagram</p>
+          <h2 id="instagram-heading">Instagram'dan Kareler</h2>
+          <p class="lede">Mağazamızdan, koleksiyonlarımızdan ve Instagram paylaşımlarımızdan daha fazlasını keşfedin.</p>
+        </div>
+      </div>
+      <div class="ig-grid" data-ig-grid>
+        <% instagramPosts.forEach(function (post) { %>
+          <article class="ig-card" data-ig-card>
+            <div class="ig-media">
+              <div class="ig-embed" data-ig-embed>
+                <blockquote class="instagram-media" data-instgrm-permalink="<%= post.url %>" data-instgrm-version="14">
+                  <a href="<%= post.url %>" target="_blank" rel="noopener noreferrer">Instagram’da aç</a>
+                </blockquote>
+              </div>
+              <% if (post.image || post.video) { %>
+                <a class="ig-fallback" data-ig-fallback href="<%= post.url %>" target="_blank" rel="noopener noreferrer">
+                  <% if (post.video) { %>
+                    <video src="<%= post.video %>" <% if (post.image) { %>poster="<%= post.image %>"<% } %> controls playsinline preload="metadata"></video>
+                  <% } else { %>
+                    <img src="<%= post.image %>" alt="<%= post.alt %>">
+                  <% } %>
+                  <% if (post.kind === 'video' && !post.video) { %>
+                    <span class="ig-play">Reel</span>
+                  <% } %>
+                </a>
+              <% } %>
+            </div>
+          </article>
+        <% }) %>
+      </div>
+      <a class="section-link ig-follow" href="<%= store.instagram %>" rel="noopener noreferrer">Instagram'da Bizi Takip Edin</a>
+    </div>
+  </section>
+  <script async src="https://www.instagram.com/embed.js"></script>
+  <script src="/js/instagram.js"></script>
+
   <section class="section" id="about" aria-labelledby="about-heading">
     <div class="shell editorial">
-      <figure class="editorial-photo">
-        <img src="/images/editorial-optical.jpg" alt="Numaralı gözlük çerçevesinin yakın çekimi.">
+      <figure class="editorial-photo editorial-photo--store">
+        <img src="/images/unnamed.webp" alt="Optik Ayşegül Özçelik mağazasının sarı ve beyaz balonlarla süslenmiş vitrini.">
       </figure>
       <div>
         <p class="eyebrow">Mağaza</p>
