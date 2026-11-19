@@ -503,7 +503,10 @@ h3,
 }
 
 .ig-card {
+  display: block;
   min-width: 0;
+  color: inherit;
+  text-decoration: none;
   transition: transform 0.35s ease;
 }
 
@@ -513,69 +516,68 @@ h3,
 
 .ig-media {
   position: relative;
+  display: block;
+  overflow: hidden;
+  aspect-ratio: 4 / 5;
   background: var(--mist);
 }
 
-.ig-embed {
-  width: 100%;
-  height: 0;
-  overflow: hidden;
-}
-
-.ig-card.is-embed .ig-embed {
-  position: relative;
-  height: auto;
-  overflow: visible;
-  opacity: 1;
-  pointer-events: auto;
-  z-index: 1;
-}
-
-.ig-card.is-embed iframe {
-  width: 100% !important;
-  max-width: 100% !important;
-  margin: 0 !important;
-}
-
-.ig-fallback {
-  position: relative;
-  z-index: 1;
-  display: block;
-  overflow: hidden;
-  color: inherit;
-  text-decoration: none;
-}
-
-.ig-card.is-embed .ig-fallback {
-  display: none;
-}
-
-.ig-fallback img,
-.ig-fallback video {
+.ig-media img {
   display: block;
   width: 100%;
-  height: auto;
-  aspect-ratio: 4 / 5;
+  height: 100%;
   object-fit: cover;
   transition: transform 0.6s ease;
 }
 
-.ig-card:hover .ig-fallback img,
-.ig-card:hover .ig-fallback video {
+.ig-card:hover .ig-media img {
   transform: scale(1.045);
+}
+
+.ig-mark {
+  position: absolute;
+  top: 0.85rem;
+  right: 0.85rem;
+  width: 1.65rem;
+  height: 1.65rem;
+  color: var(--white);
+  filter: drop-shadow(0 1px 2px rgba(17, 17, 17, 0.45));
+}
+
+.ig-mark svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+}
+
+.ig-mark circle:last-child {
+  fill: currentColor;
+  stroke: none;
 }
 
 .ig-play {
   position: absolute;
-  left: 1rem;
-  bottom: 1rem;
-  color: var(--white);
-  font-size: 0.68rem;
-  font-weight: 600;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  border-bottom: 1px solid var(--gold);
-  padding-bottom: 0.15rem;
+  left: 50%;
+  top: 50%;
+  width: 3.4rem;
+  height: 3.4rem;
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  background: rgba(17, 17, 17, 0.28);
+  transform: translate(-50%, -50%);
+}
+
+.ig-play::before {
+  content: "";
+  position: absolute;
+  left: 1.35rem;
+  top: 1.05rem;
+  border-style: solid;
+  border-width: 0.62rem 0 0.62rem 1rem;
+  border-color: transparent transparent transparent var(--white);
 }
 
 .ig-follow {

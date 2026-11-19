@@ -1,5 +1,3 @@
-const fs = require('fs');
-const path = require('path');
 const productModel = require('../models/productModel');
 
 const INSTAGRAM_POSTS = [
@@ -24,17 +22,10 @@ const INSTAGRAM_POSTS = [
 ];
 
 function instagramPosts() {
-  return INSTAGRAM_POSTS.map((post) => {
-    const directory = path.join(__dirname, '../public/images/instagram');
-    const imageFile = path.join(directory, `${post.id}.jpg`);
-    const videoFile = path.join(directory, `${post.id}.mp4`);
-
-    return {
-      ...post,
-      image: fs.existsSync(imageFile) ? `/images/instagram/${post.id}.jpg` : '',
-      video: fs.existsSync(videoFile) ? `/images/instagram/${post.id}.mp4` : ''
-    };
-  });
+  return INSTAGRAM_POSTS.map((post) => ({
+    ...post,
+    image: `/images/instagram/${post.id}.jpg`
+  }));
 }
 
 async function home(req, res, next) {
